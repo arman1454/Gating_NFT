@@ -22,6 +22,22 @@ const fetchNFTs = async(account)=>{
     }
 }
 
+app.post('/members',async(req,res)=>{
+    try{
+       const account = req.body.from;
+       console.log(account)
+       const numNFTs = await fetchNFTs(account)
+
+       if(numNFTs.userNFTs>0){
+         res.status(200).json({status:200,numNFTs})
+       }else{
+         res.status(404).json({status:404,message:"You don't own any nft",numNFTs});
+       }
+    }catch(error){
+        res.status(500).json({status:500,message:"Internal Server Error"});
+    }
+})
+
 
 
 const PORT=3000;
