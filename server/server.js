@@ -2,14 +2,14 @@ const express = require('express');
 const cors = require('cors')
 const {Web3} = require('web3');
 const ABI =require('./ABI.json')
-const socketIO = require('socket.io')
+// const socketIO = require('socket.io')
 const app = express();
 app.use(cors())
 app.use(express.json());
 
 const web3 =new Web3('YOUR API KEY')
 
-const contractAddress = 'YOUR CONTRACT ADDRESS';
+const contractAddress = '0xB23fEaf0A57b6C1dCa81bB1205b90072FfeFF8e0';
 
 const contract = new web3.eth.Contract(ABI,contractAddress);
 
@@ -40,7 +40,7 @@ app.post('/members',async(req,res)=>{
 
 
 
-const PORT=3000;
+const PORT=5000;
 const server = app.listen(PORT,()=>{
     console.log(`Sever running at ${PORT}`)
 })
