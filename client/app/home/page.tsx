@@ -1,10 +1,32 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useAppSelector } from "../lib/store/hooks"
 
 
 const home = () => {
   const address = useAppSelector(state => state.wallet.account)
+
+  const router = useRouter();
+  const revealMsg=async()=>{
+    try{
+       const res = await fetch(`http://localhost:5000/members`,{
+          method:"POST",
+          headers:{
+            "content-type":"application/json"
+          },
+          body:JSON.stringify({from:address})
+       })
+       const data = await res.json();
+       if(data.status===200){
+        router.push('/members');
+       }else{
+         window.alert("You currently do not hold any NFTs in collection w/ address 0xd618581402226c92b14c9f4870799b3000ac4c77")
+       }
+    }catch(error){
+       console.error(error)
+    }
+}
   return (
     <div>
       <h1>Welcome Home!</h1>

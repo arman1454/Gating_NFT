@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-const web3 =new Web3('YOUR API KEY')
+const web3 =new Web3('https://eth-sepolia.g.alchemy.com/v2/yWjT9CucXzx08kTNQSDUdPTUraY1AKMt')
 
 const contractAddress = '0xB23fEaf0A57b6C1dCa81bB1205b90072FfeFF8e0';
 
