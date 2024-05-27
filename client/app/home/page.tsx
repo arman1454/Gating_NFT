@@ -5,9 +5,13 @@ import { useAppSelector } from "../lib/store/hooks"
 
 
 const home = () => {
-  const address = useAppSelector(state => state.wallet.account)
-
+  // const address = useAppSelector(state => state.wallet.account)
+  const address = localStorage.getItem('wallet')
   const router = useRouter();
+  const logOut = ()=>{
+    localStorage.clear()
+    router.push('/');
+  }
   const revealMsg=async()=>{
     try{
        const res = await fetch(`http://localhost:5000/members`,{
@@ -34,6 +38,8 @@ const home = () => {
       <br></br>
       <br></br>
       <button onClick={revealMsg}>Reveal Message</button>
+      <br />
+      <button onClick={logOut}>Log Out</button>
     </div>
   )
 }

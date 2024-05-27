@@ -11,6 +11,7 @@ export default function Index() {
       if (window.ethereum) {
         const accounts: string[] = await window.ethereum.request({ method: 'eth_requestAccounts' });
         dispatch(setAccount(accounts[0]))
+        localStorage.setItem("wallet",accounts[0])
         router.push('/home');
       } else {
         alert("Install Metamask");
