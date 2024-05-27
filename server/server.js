@@ -22,6 +22,10 @@ const fetchNFTs = async(account)=>{
     }
 }
 
+app.get("/",(req,res)=>{
+  res.send("Hi from server")
+})
+
 app.post('/members',async(req,res)=>{
     try{
        const account = req.body.from;
@@ -37,6 +41,33 @@ app.post('/members',async(req,res)=>{
         res.status(500).json({status:500,message:"Internal Server Error"});
     }
 })
+
+app.post('/webhook',async(req,res)=>{
+  try{
+    console.log("nft transfered");
+    const account = req.body.nftTransfers[0].from;
+    const numNFTs = await fetchNFTs(account);
+    console.log(numNFTs);
+    // io.emit('nftsUpdated',{userNFTs:numNFTs.userNFTs})
+    res.status(200).json({status:200,message:"Webhook Triggered"})
+  }catch(error){
+    console.error(error)
+  }
+})
+
+// import Moralis from 'moralis';
+
+// try {
+//   await Moralis.start({
+//     apiKey: "YOUR_API_KEY"
+//   });
+
+//   const response = Moralis.Streams.addAddress({});
+
+//   console.log(response.raw);
+// } catch (e) {
+//   console.error(e);
+// }
 
 
 
