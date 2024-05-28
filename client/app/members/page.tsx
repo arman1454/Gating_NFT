@@ -1,24 +1,27 @@
 "use client"
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import { io } from 'socket.io-client';
+import  io  from 'socket.io-client';
 const members = () => {
-  const [socket,setSocket]=useState(null);
+  const [socket,setSocket]=useState<any>(null);
   const address = localStorage.getItem('wallet')
   const router = useRouter();
   useEffect(()=>{
-    const socketInstance = io('http://localhost:5000');
-    setSocket(socketInstance);
-
+    const socket = io('http://localhost:5000');
+    if(socket){
+    setSocket(socket);
+    }
     return()=>{
-      socketInstance.disconnect()
+      socket.disconnect()
     }
   },[])
 
   useEffect(()=>{
     if(socket){
       socket.on('nftsUpdated',(data)=>{
-        if(data.userNFTs<=2){
+        console.log(data.userNFTs);
+        
+        if(data.userNFTs<4){
            router.push('/home')
            alert("you don't hold the requirements of viewing it Logging out")
         }

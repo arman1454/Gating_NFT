@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const {Web3} = require('web3');
 const ABI =require('./ABI.json')
-const socketIO = require('socket.io')
+// const socketIO = require('socket.io')
 const app = express();
 app.use(cors())
 app.use(express.json());
@@ -31,8 +31,8 @@ app.post('/members',async(req,res)=>{
        const account = req.body.from;
       //  console.log(account)
        const numNFTs = await fetchNFTs(account)
-
-       if(numNFTs.userNFTs>=2){
+      console.log(numNFTs.userNFTs);
+       if(numNFTs.userNFTs>0){
          res.status(200).json({status:200,numNFTs})
        }else{
          res.status(404).json({status:404,message:"You don't own any nft",numNFTs});
@@ -42,18 +42,7 @@ app.post('/members',async(req,res)=>{
     }
 })
 
-app.post('/webhook',async(req,res)=>{
-  try{
-    console.log("nft transfered");
-    const account = req.body.nftTransfers[0].from;
-    const numNFTs = await fetchNFTs(account);
-    console.log(numNFTs);
-    io.emit('nftsUpdated',{userNFTs:numNFTs.userNFTs})
-    res.status(200).json({status:200,message:"Webhook Triggered"})
-  }catch(error){
-    console.error(error)
-  }
-})
+
 
 // import Moralis from 'moralis';
 
@@ -76,7 +65,25 @@ const server = app.listen(PORT,()=>{
     console.log(`Sever running at ${PORT}`)
 })
 
-const io = socketIO(server);
-io.on('connection',()=>{
+const io = require('socket.io')(server,{
+  cors:{
+    origin:"http://localhost:3000"
+  }
+})
+
+
+io.on('connection',(socket)=>{
   console.log("Connected")
+})
+
+app.post('/webhook',async(req,res)=>{
+  try{
+    console.log("nft transfered");
+    const account = req.body.nftTransfers[0].from;
+    const numNFTs = await fetchNFTs(account);
+    io.emit("nftsUpdated",{userNFTs:numNFTs.userNFTs})
+    res.status(200).json({status:200,message:"Webhook Triggered"})
+  }catch(error){
+    console.error(error) 
+  }
 })
