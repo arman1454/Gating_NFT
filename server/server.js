@@ -25,6 +25,7 @@ const fetchNFTs = async(account)=>{
 }
 
 app.get("/",(req,res)=>{
+  // console.log("got a request");
   res.send("Hi from server")
 })
 
