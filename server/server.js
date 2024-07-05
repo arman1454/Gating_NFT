@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors')
 const {Web3} = require('web3');
 const ABI =require('./ABI.json')
+const Moralis = require('moralis').default
+require('dotenv').config()
 // const socketIO = require('socket.io')
 const app = express();
 app.use(cors())
@@ -43,6 +45,25 @@ app.post('/members',async(req,res)=>{
 })
 
 
+app.post('/addAddress',async(req,res)=>{
+  const account = req.body.from;
+  console.log(account);
+  try {
+    
+    await Moralis.start({
+          apiKey: process.env.API_KEY
+        });
+        const response = Moralis.Streams.addAddress({
+          "id": "10427e2b-2e9c-4068-9301-7b8ec97a51ee",
+          "address": account
+        });
+
+    console.log(response); 
+    res.status(200).json({status:200,msg:"address added"})
+  } catch (error) {
+    console.error(error); 
+  }
+})
 
 // import Moralis from 'moralis';
 
@@ -53,7 +74,7 @@ app.post('/members',async(req,res)=>{
 
 //   const response = Moralis.Streams.addAddress({});
 
-//   console.log(response.raw);
+//   console.log(response.raw); 
 // } catch (e) {
 //   console.error(e);
 // }
@@ -87,3 +108,6 @@ app.post('/webhook',async(req,res)=>{
     console.error(error) 
   }
 })
+
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjM4OTY1NmUwLTZhYTktNDIyMS1iNjI1LTIxZGIzOWM0OWZmMyIsIm9yZ0lkIjoiMzkzODA1IiwidXNlcklkIjoiNDA0NjUxIiwidHlwZUlkIjoiYWJhNzNjMmUtZDY5Mi00YjY0LTg3OWQtZWRlZDk5NTcwNDM5IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTY3NDQ3MzgsImV4cCI6NDg3MjUwNDczOH0.AgUPWNhu2S1GYHoxn8o4h-dtKH7EQzHK8bRAuPk8bqw

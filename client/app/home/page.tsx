@@ -12,6 +12,21 @@ const home = () => {
     localStorage.clear()
     router.push('/');
   }
+
+  const addAddress = async()=>{
+    const address = localStorage.getItem("wallet")
+    const res = await fetch(`http://localhost:5000/addAddress`,{
+          method:"POST",
+          headers:{
+            "content-type":"application/json"
+          },
+          body:JSON.stringify({from:address})
+       })
+    const data = await res.json();   
+    console.log(data.msg);
+    
+  }
+
   const revealMsg=async()=>{
     try{
        const res = await fetch(`http://localhost:5000/members`,{
@@ -40,6 +55,7 @@ const home = () => {
       <button onClick={revealMsg}>Reveal Message</button>
       <br />
       <button onClick={logOut}>Log Out</button>
+      <button className="pl-12" onClick={addAddress}>Add Address</button>
     </div>
   )
 }
